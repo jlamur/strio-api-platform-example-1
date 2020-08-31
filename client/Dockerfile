@@ -32,7 +32,7 @@ CMD ["yarn", "start"]
 # depends on the "development" stage above
 FROM api_platform_client_development AS api_platform_client_build
 
-ARG REACT_APP_API_ENTRYPOINT
+ENV REACT_APP_API_ENTRYPOINT "STRIO_REACT_APP_API_ENTRYPOINT"
 
 RUN set -eux; \
 	yarn build
@@ -47,3 +47,7 @@ COPY docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 WORKDIR /usr/src/client/build
 
 COPY --from=api_platform_client_build /usr/src/client/build ./
+
+COPY entrypoint.sh /
+
+ENTRYPOINT [ "/entrypoint.sh" ]
